@@ -4,6 +4,8 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
 
 @MainActor
 final class NoteListViewModel: ObservableObject {
@@ -12,8 +14,8 @@ final class NoteListViewModel: ObservableObject {
 
     private let storage: NoteStorageServiceProtocol
 
-    init(storage: NoteStorageServiceProtocol = NoteStorageService()) {
-        self.storage = storage
+    init(storage: NoteStorageServiceProtocol? = nil) {
+        self.storage = storage ?? NoteStorageService()
     }
 
     func loadNotes() {

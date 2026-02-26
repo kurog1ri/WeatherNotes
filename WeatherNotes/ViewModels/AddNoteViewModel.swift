@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Combine
 
 @MainActor
 final class AddNoteViewModel: ObservableObject {
@@ -16,11 +17,11 @@ final class AddNoteViewModel: ObservableObject {
     private let storage: NoteStorageServiceProtocol
 
     init(
-        weatherService: WeatherServiceProtocol = WeatherService(),
-        storage: NoteStorageServiceProtocol = NoteStorageService()
+        weatherService: WeatherServiceProtocol? = nil,
+        storage: NoteStorageServiceProtocol? = nil
     ) {
-        self.weatherService = weatherService
-        self.storage = storage
+        self.weatherService = weatherService ?? WeatherService()
+        self.storage = storage ?? NoteStorageService()
     }
 
     var canSave: Bool {
