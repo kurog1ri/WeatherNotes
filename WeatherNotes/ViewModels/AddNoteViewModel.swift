@@ -12,6 +12,7 @@ final class AddNoteViewModel: ObservableObject {
     @Published var noteText: String = ""
     @Published var isSaving: Bool = false
     @Published var errorMessage: String?
+    @Published var saveCompleted: Bool = false
 
     private let weatherService: WeatherServiceProtocol
     private let storage: NoteStorageServiceProtocol
@@ -33,14 +34,23 @@ final class AddNoteViewModel: ObservableObject {
         isSaving = true
         errorMessage = nil
 
-        let weather = try? await weatherService.fetchWeather(city: Config.defaultCity)
+        var fetchedWeather: WeatherData?
+        do {
+            fetchedWeather = try await weatherService.fetchWeather(city: Config.defaultCity)
+        } catch let error as AppError {
+            errorMessage = error.errorDescription
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+
         let note = WeatherNote(
             text: noteText.trimmingCharacters(in: .whitespaces),
             createdAt: Date(),
-            weather: weather
+            weather: fetchedWeather
         )
 
         storage.saveNote(note)
         isSaving = false
+        saveCompleted = true
     }
 }

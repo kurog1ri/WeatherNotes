@@ -29,10 +29,20 @@ struct AddNoteView: View {
                     saveButton
                 }
             }
-            .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
+            .alert("Weather Unavailable", isPresented: Binding(
+                get: { viewModel.errorMessage != nil && viewModel.saveCompleted },
+                set: { _ in viewModel.errorMessage = nil }
+            )) {
                 Button("OK") { viewModel.errorMessage = nil }
             } message: {
                 Text(viewModel.errorMessage ?? "")
+            }
+            .onChange(of: viewModel.saveCompleted) { _, completed in
+                if completed {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    onSave?()
+                    dismiss()
+                }
             }
         }
     }
@@ -60,14 +70,7 @@ struct AddNoteView: View {
                     .scaleEffect(0.8)
             } else {
                 Button("Save") {
-                    Task {
-                        await viewModel.save()
-                        if viewModel.errorMessage == nil {
-                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            onSave?()
-                            dismiss()
-                        }
-                    }
+                    Task { await viewModel.save() }
                 }
                 .disabled(!viewModel.canSave)
                 .fontWeight(.semibold)
