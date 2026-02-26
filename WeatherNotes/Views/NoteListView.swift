@@ -9,6 +9,11 @@ struct NoteListView: View {
 
     @StateObject private var viewModel = NoteListViewModel()
     @State private var showAddNote = false
+    @AppStorage("colorScheme") private var colorSchemePreference: String = "system"
+
+    private var isDark: Bool {
+        colorSchemePreference == "dark"
+    }
 
     var body: some View {
         NavigationStack {
@@ -21,6 +26,15 @@ struct NoteListView: View {
             }
             .navigationTitle("Weather Notes")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        colorSchemePreference = isDark ? "light" : "dark"
+                    } label: {
+                        Image(systemName: isDark ? "sun.max" : "moon.stars")
+                            .symbolRenderingMode(.hierarchical)
+                            .contentTransition(.symbolEffect(.replace))
+                    }
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         showAddNote = true
