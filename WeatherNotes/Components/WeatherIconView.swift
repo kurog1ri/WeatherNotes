@@ -10,6 +10,8 @@ struct WeatherIconView: View {
     let iconCode: String?
     let size: CGFloat
 
+    @Environment(\.colorScheme) private var colorScheme
+
     init(iconCode: String?, size: CGFloat = 32) {
         self.iconCode = iconCode
         self.size = size
@@ -21,24 +23,40 @@ struct WeatherIconView: View {
                 .fill(conditionColor.opacity(0.15))
                 .frame(width: size + 16, height: size + 16)
 
-            if let code = iconCode,
-               let url = URL(string: "https://openweathermap.org/img/wn/\(code)@2x.png") {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: size, height: size)
-                    case .failure, .empty:
-                        fallbackIcon
-                    @unknown default:
-                        fallbackIcon
-                    }
-                }
+            if colorScheme == .dark {
+                Image(systemName: sfSymbolName)
+                    .symbolRenderingMode(.multicolor)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: size, height: size)
             } else {
-                fallbackIcon
+                Image(systemName: sfSymbolName)
+                    .symbolRenderingMode(.monochrome)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: size, height: size)
+                    .foregroundStyle(.primary)
             }
+        }
+    }
+
+    // MARK: - OWM icon code → SF Symbol
+
+    private var sfSymbolName: String {
+        switch iconCode {
+        case "01d":           return "sun.max.fill"
+        case "01n":           return "moon.stars.fill"
+        case "02d":           return "cloud.sun.fill"
+        case "02n":           return "cloud.moon.fill"
+        case "03d", "03n":    return "cloud.fill"
+        case "04d", "04n":    return "smoke.fill"
+        case "09d", "09n":    return "cloud.drizzle.fill"
+        case "10d":           return "cloud.rain.fill"
+        case "10n":           return "cloud.rain.fill"
+        case "11d", "11n":    return "cloud.bolt.fill"
+        case "13d", "13n":    return "cloud.snow.fill"
+        case "50d", "50n":    return "cloud.fog.fill"
+        default:              return "cloud.fill"
         }
     }
 
@@ -55,21 +73,14 @@ struct WeatherIconView: View {
         default:   return .blue
         }
     }
-
-    private var fallbackIcon: some View {
-        Image(systemName: "cloud.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: size, height: size)
-            .foregroundStyle(conditionColor)
-    }
 }
 
 #Preview {
-    HStack(spacing: 24) {
+    HStack(spacing: 20) {
         WeatherIconView(iconCode: "01d", size: 36)
         WeatherIconView(iconCode: "10d", size: 36)
         WeatherIconView(iconCode: "13d", size: 36)
+        WeatherIconView(iconCode: "11d", size: 36)
         WeatherIconView(iconCode: nil,   size: 36)
     }
     .padding()
