@@ -62,6 +62,7 @@ struct NoteDetailView: View {
                     Text(viewModel.temperature)
                         .font(.largeTitle)
                         .fontWeight(.bold)
+                        .foregroundStyle(viewModel.note.weather?.temperatureColor ?? .primary)
 
                     Text(viewModel.weatherDescription)
                         .font(.body)

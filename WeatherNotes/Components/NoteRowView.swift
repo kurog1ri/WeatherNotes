@@ -34,11 +34,11 @@ struct NoteRowView: View {
 
             Spacer()
 
-            if let temp = note.weather?.temperatureFormatted {
-                Text(temp)
+            if let weather = note.weather {
+                Text(weather.temperatureFormatted)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(weather.temperatureColor)
             }
         }
         .padding(.vertical, 4)

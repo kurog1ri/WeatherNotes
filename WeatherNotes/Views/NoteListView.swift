@@ -33,6 +33,7 @@ struct NoteListView: View {
                         Image(systemName: isDark ? "sun.max" : "moon.stars")
                             .symbolRenderingMode(.hierarchical)
                             .contentTransition(.symbolEffect(.replace))
+                            .foregroundStyle(isDark ? .orange : .indigo)
                     }
                 }
                 ToolbarItem(placement: .primaryAction) {
@@ -41,6 +42,7 @@ struct NoteListView: View {
                     } label: {
                         Image(systemName: "plus")
                             .fontWeight(.semibold)
+                            .foregroundStyle(.blue)
                     }
                 }
             }
