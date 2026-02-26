@@ -35,7 +35,7 @@ struct NoteDetailView: View {
                 .textCase(.uppercase)
 
             Text(viewModel.note.text)
-                .font(.title3)
+                .font(.typewriter(.title3))
                 .fontWeight(.medium)
                 .foregroundStyle(.primary)
 

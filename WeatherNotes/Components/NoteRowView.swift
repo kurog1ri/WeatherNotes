@@ -22,7 +22,7 @@ struct NoteRowView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(note.text)
-                    .font(.body)
+                    .font(.typewriter())
                     .fontWeight(.medium)
                     .foregroundStyle(.primary)
                     .lineLimit(2)

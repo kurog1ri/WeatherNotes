@@ -56,7 +56,7 @@ struct AddNoteView: View {
                 .foregroundStyle(.secondary)
 
             TextField("e.g. Morning jog, Commute to work…", text: $viewModel.noteText, axis: .vertical)
-                .font(.body)
+                .font(.typewriter())
                 .lineLimit(4...8)
                 .padding(12)
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
